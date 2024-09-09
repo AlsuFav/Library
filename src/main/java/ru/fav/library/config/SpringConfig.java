@@ -23,7 +23,7 @@ import java.util.Objects;
 @Configuration
 @ComponentScan("ru.fav.library")
 @EnableWebMvc
-@PropertySource("classpath:database.properties.gitignore")
+@PropertySource("classpath:database.properties")
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
     private final Environment environment;
