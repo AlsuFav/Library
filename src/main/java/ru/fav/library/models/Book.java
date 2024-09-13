@@ -1,21 +1,34 @@
 package ru.fav.library.models;
 
-import jakarta.validation.constraints.Max;
+
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+@Entity
+@Table(name = "Book")
 public class Book {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotEmpty(message = "Название книги не должно быть пустым")
     @Size(max = 70, message = "Название книги должно содержать не более 70 символов")
+    @Column(name = "title")
     private String title;
 
     @NotEmpty(message = "Имя автора не должно быть пустым")
     @Size(max = 70, message = "Имя автора должно содержать не более 70 символов")
+    @Column(name = "author")
     private String author;
 
+    @Column(name = "published_year")
     private int published_year;
+
+    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person person;
 
     public Book() {}
 
@@ -55,5 +68,13 @@ public class Book {
 
     public void setPublished_year(int published_year) {
         this.published_year = published_year;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

@@ -1,10 +1,10 @@
-insert into person (full_name, birth_year)
+insert into person (full_name, birth_year, email)
 values
-    ('Иванов Иван Иванович', 1990),
-    ('Васильев Николай Васильевич', 2001),
-    ('Сидоров Алексей Сергеевич', 2004),
-    ('Кузнецова Елена Николаевна', 1978),
-    ('Петрова Мария Петровна', 1962);
+    ('Иванов Иван Иванович', 1990, 'ivan@gmail.com'),
+    ('Васильев Николай Васильевич', 2001, 'nikolai@gmail.com'),
+    ('Сидоров Алексей Сергеевич', 2004, 'alex@gmail.com'),
+    ('Кузнецова Елена Николаевна', 1978, 'elena@gmail.com'),
+    ('Петрова Мария Петровна', 1962, 'maria@gmail.com');
 
 insert into book (title, author, published_year, person_id)
 values

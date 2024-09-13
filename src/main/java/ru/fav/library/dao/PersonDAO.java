@@ -1,52 +1,84 @@
 package ru.fav.library.dao;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fav.library.models.Book;
 import ru.fav.library.models.Person;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
 @Component
 public class PersonDAO {
-    private final JdbcTemplate jdbcTemplate;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public PersonDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public PersonDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-
+    @Transactional(readOnly = true)
     public List<Person> index() {
-        return jdbcTemplate.query("select * from person", new BeanPropertyRowMapper<>(Person.class));
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select p from Person p", Person.class).getResultList();
     }
 
+    @Transactional(readOnly = true)
     public Person show(int id) {
-        return jdbcTemplate.query("select * from person where id = ?", new BeanPropertyRowMapper<>(Person.class), id).stream().findFirst().orElse(null);
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Person.class, id);
+     }
+
+    @Transactional(readOnly = true)
+    public Optional<Person> showByName(String full_name) {
+        Session session = sessionFactory.getCurrentSession();
+        Person person = session.createQuery("select p from Person p where p.full_name = ?1", Person.class)
+                .setParameter(1, full_name).uniqueResult();
+
+        return Optional.ofNullable(person);
     }
 
-    public Optional<Person> show(String full_name) {
-        return jdbcTemplate.query("select * from person where full_name = ?", new BeanPropertyRowMapper<>(Person.class), full_name).stream().findFirst();
+    @Transactional(readOnly = true)
+    public Optional<Person> showByEmail(String email) {
+        Session session = sessionFactory.getCurrentSession();
+        Person person = session.createQuery("select p from Person p where p.email = ?1", Person.class)
+                .setParameter(1, email).uniqueResult();
+
+        return Optional.ofNullable(person);
     }
 
+    @Transactional
     public void save(Person person) {
-        jdbcTemplate.update("insert into person (full_name, birth_year) values (?, ?)",
-                person.getFull_name(), person.getBirth_year());
+        Session session = sessionFactory.getCurrentSession();
+        session.persist(person);
     }
 
+    @Transactional
     public void update(int id, Person updatedPerson) {
-        jdbcTemplate.update("update person set full_name=?, birth_year=? where id=?",
-                updatedPerson.getFull_name(), updatedPerson.getBirth_year(), id);
+        Session session = sessionFactory.getCurrentSession();
+        Person person = session.get(Person.class, id);
+
+        person.setFull_name(updatedPerson.getFull_name());
+        person.setBirth_year(updatedPerson.getBirth_year());
+        person.setEmail(updatedPerson.getEmail());
     }
 
+    @Transactional
     public void delete(int id) {
-        jdbcTemplate.update("delete from person where id=?", id);
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(session.get(Person.class, id));
     }
 
+    @Transactional(readOnly = true)
     public List<Book> getBooksByPersonId(int id) {
-        return jdbcTemplate.query("select * from book where person_id = ?", new BeanPropertyRowMapper<>(Book.class), id);
+        Session session = sessionFactory.getCurrentSession();
+        Person person = session.get(Person.class, id);
+        System.out.println(person.getBooks());
+        return person.getBooks();
     }
 }

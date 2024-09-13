@@ -15,6 +15,10 @@
     <input type="text" th:field="*{birth_year}" id="birth_year"/>
     <div style="color: crimson" th:if="${#fields.hasErrors('birth_year')}" th:errors="*{birth_year}">Age error</div>
     <br/>
+    <label for="email">Введите почту: </label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div style="color: crimson" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+    <br/>
     <input type="submit" value="Создать"/>
 </form>
 
