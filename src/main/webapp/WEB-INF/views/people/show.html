@@ -5,7 +5,7 @@
     <title>Пользователь</title>
 </head>
 <body>
-<p th:text="${person.getFull_name() + ', ' + person.getBirth_year()}">VALUE</p>
+<p th:text="${person.getFullName() + ', ' + person.getBirthday()}">VALUE</p>
 <p th:text="${person.getEmail()}">VALUE</p>
 
 <div th:if="${books.isEmpty()}">
@@ -19,7 +19,7 @@
     <br/>
     <div th:each="book : ${books}">
         <a th:href="@{/books/{id}(id=${book.getId()})}"
-           th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getPublished_year()}">book</a>
+           th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getPublished()}">book</a>
     </div>
     <hr/>
 </div>

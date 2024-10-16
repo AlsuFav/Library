@@ -7,13 +7,13 @@
 <body>
 
 <form th:method="POST" th:action="@{/people}" th:object="${person}">
-    <label for="full_name">Введите ФИО: </label>
-    <input type="text" th:field="*{full_name}" id="full_name"/>
-    <div style="color: crimson" th:if="${#fields.hasErrors('full_name')}" th:errors="*{full_name}">Name error</div>
+    <label for="fullName">Введите ФИО: </label>
+    <input type="text" th:field="*{fullName}" id="fullName"/>
+    <div style="color: crimson" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Name error</div>
     <br/>
-    <label for="birth_year">Введите год рождения: </label>
-    <input type="text" th:field="*{birth_year}" id="birth_year"/>
-    <div style="color: crimson" th:if="${#fields.hasErrors('birth_year')}" th:errors="*{birth_year}">Age error</div>
+    <label for="birthday">Введите дату рождения (дд.мм.гггг): </label>
+    <input type="text" th:field="*{birthday}" id="birthday"/>
+    <div style="color: crimson" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">Birthday error</div>
     <br/>
     <label for="email">Введите почту: </label>
     <input type="text" th:field="*{email}" id="email"/>

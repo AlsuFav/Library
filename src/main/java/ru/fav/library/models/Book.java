@@ -23,8 +23,8 @@ public class Book {
     @Column(name = "author")
     private String author;
 
-    @Column(name = "published_year")
-    private int published_year;
+    @Column(name = "published")
+    private int published;
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
@@ -32,10 +32,10 @@ public class Book {
 
     public Book() {}
 
-    public Book(String title, String author, int published_year) {
+    public Book(String title, String author, int published) {
         this.title = title;
         this.author = author;
-        this.published_year = published_year;
+        this.published = published;
     }
 
     public int getId() {
@@ -62,12 +62,12 @@ public class Book {
         this.author = author;
     }
 
-    public int getPublished_year() {
-        return published_year;
+    public int getPublished() {
+        return published;
     }
 
-    public void setPublished_year(int published_year) {
-        this.published_year = published_year;
+    public void setPublished(int publishedYear) {
+        this.published = publishedYear;
     }
 
     public Person getPerson() {

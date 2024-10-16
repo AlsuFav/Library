@@ -1,12 +1,12 @@
-insert into person (full_name, birth_year, email)
+insert into person (full_name, birthday, email)
 values
-    ('Иванов Иван Иванович', 1990, 'ivan@gmail.com'),
-    ('Васильев Николай Васильевич', 2001, 'nikolai@gmail.com'),
-    ('Сидоров Алексей Сергеевич', 2004, 'alex@gmail.com'),
-    ('Кузнецова Елена Николаевна', 1978, 'elena@gmail.com'),
-    ('Петрова Мария Петровна', 1962, 'maria@gmail.com');
+    ('Иванов Иван Иванович', '1990-05-27', 'ivan@gmail.com'),
+    ('Васильев Николай Васильевич', '2001-07-07', 'nikolai@gmail.com'),
+    ('Сидоров Алексей Сергеевич', '2004-11-28', 'alex@gmail.com'),
+    ('Кузнецова Елена Николаевна', '1988-05-01', 'elena@gmail.com'),
+    ('Петрова Мария Петровна', '1964-09-08', 'maria@gmail.com');
 
-insert into book (title, author, published_year, person_id)
+insert into book (title, author, published, person_id)
 values
     ('Война и мир', 'Лев Толстой', 1869, 1),
     ('Анна Каренина', 'Лев Толстой', 1877, 1),

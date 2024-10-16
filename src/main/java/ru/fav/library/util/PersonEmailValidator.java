@@ -4,17 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.fav.library.dao.PersonDAO;
 import ru.fav.library.models.Person;
+import ru.fav.library.services.PeopleService;
+
+import java.util.Optional;
 
 
 @Component
-public class PersonValidator implements Validator {
-    private final PersonDAO personDAO;
+public class PersonEmailValidator implements Validator {
+    private final PeopleService peopleService;
 
     @Autowired
-    public PersonValidator(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public PersonEmailValidator(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
 
     @Override
@@ -24,13 +26,12 @@ public class PersonValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        Person person = (Person) target;
+        Person targetPerson = (Person) target;
+        System.out.println(targetPerson.getId());
 
-        if (personDAO.showByName(person.getFull_name()).isPresent()) {
-            errors.rejectValue("full_name", "", "Это ФИО уже существует");
-        }
+        Optional<Person> person = peopleService.findByEmail(targetPerson.getEmail());
 
-        if (personDAO.showByEmail(person.getEmail()).isPresent()) {
+        if (person.isPresent() && person.get().getId() != targetPerson.getId()) {
             errors.rejectValue("email", "", "Эта почта уже существует");
         }
     }

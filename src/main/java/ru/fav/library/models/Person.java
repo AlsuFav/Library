@@ -1,9 +1,11 @@
 package ru.fav.library.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import jdk.jfr.Name;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -20,17 +22,21 @@ public class Person {
     @Pattern(regexp = "[А-Я][а-я]+ [А-Я][а-я]+ [А-Я][а-я]+",
             message = "ФИО должно быть следующего формата: Фамилия Имя Отчество")
     @Column(name = "full_name")
-    private String full_name;
+    private String fullName;
 
 
-    @Min(value = 1900,
-            message = "Год рождения должен быть не меньше чем 1900")
-    @Column(name = "birth_year")
-    private int birth_year;
+    @Column(name = "birthday")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date birthday;
 
     @NotEmpty(message = "Почта не должна быть пустой")
     @Column(name = "email")
     private String email;
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private List<Book> books;
@@ -38,9 +44,9 @@ public class Person {
     public Person() {
     }
 
-    public Person(String full_name, int birth_year, String email) {
-        this.full_name = full_name;
-        this.birth_year = birth_year;
+    public Person(String fullName, Date birthday, String email) {
+        this.fullName = fullName;
+        this.birthday = birthday;
         this.email = email;
     }
 
@@ -52,23 +58,22 @@ public class Person {
         this.id = id;
     }
 
-    public @NotEmpty(message = "ФИО не должно быть пустым") @Size(max = 60, message = "ФИО должно содержать не более 70 символов") @Pattern(regexp = "[А-Я][а-я]+ [А-Я][а-я]+ [А-Я][а-я]+",
-            message = "ФИО должно быть следующего формата: Фамилия Имя Отчество") String getFull_name() {
-        return full_name;
+    public @NotEmpty(message = "ФИО не должно быть пустым") @Size(max = 70, message = "ФИО должно содержать не более 70 символов") @Pattern(regexp = "[А-Я][а-я]+ [А-Я][а-я]+ [А-Я][а-я]+",
+            message = "ФИО должно быть следующего формата: Фамилия Имя Отчество") String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(@NotEmpty(message = "ФИО не должно быть пустым") @Size(max = 60, message = "ФИО должно содержать не более 70 символов") @Pattern(regexp = "[А-Я][а-я]+ [А-Я][а-я]+ [А-Я][а-я]+",
-            message = "ФИО должно быть следующего формата: Фамилия Имя Отчество") String full_name) {
-        this.full_name = full_name;
+    public void setFullName(@NotEmpty(message = "ФИО не должно быть пустым") @Size(max = 70, message = "ФИО должно содержать не более 70 символов") @Pattern(regexp = "[А-Я][а-я]+ [А-Я][а-я]+ [А-Я][а-я]+",
+            message = "ФИО должно быть следующего формата: Фамилия Имя Отчество") String fullName) {
+        this.fullName = fullName;
     }
 
-    @Min(value = 1900, message = "Год рождения должен быть не меньше чем 1900")
-    public int getBirth_year() {
-        return birth_year;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setBirth_year(@Min(value = 1900, message = "Год рождения должен быть не меньше чем 1900") int birth_year) {
-        this.birth_year = birth_year;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public @NotEmpty(message = "Почта не должна быть пустой") String getEmail() {
@@ -77,6 +82,14 @@ public class Person {
 
     public void setEmail(@NotEmpty(message = "Почта не должна быть пустой") String email) {
         this.email = email;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public List<Book> getBooks() {
