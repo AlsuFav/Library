@@ -17,14 +17,12 @@ import ru.fav.library.util.PersonEmailValidator;
 public class PeopleController {
 
     private final PeopleService peopleService;
-    private final BooksService booksService;
     private final PersonEmailValidator personEmailValidator;
     private final PersonBirthdayValidator personBirthdayValidator;
 
     @Autowired
-    public PeopleController(PeopleService peopleService, BooksService booksService, PersonEmailValidator personEmailValidator, PersonBirthdayValidator personBirthdayValidator) {
+    public PeopleController(PeopleService peopleService, PersonEmailValidator personEmailValidator, PersonBirthdayValidator personBirthdayValidator) {
         this.peopleService = peopleService;
-        this.booksService = booksService;
         this.personEmailValidator = personEmailValidator;
         this.personBirthdayValidator = personBirthdayValidator;
     }
@@ -40,7 +38,7 @@ public class PeopleController {
         Person person = peopleService.findById(id);
 
         model.addAttribute("person", person);
-        model.addAttribute("books", booksService.findByPerson(person));
+        model.addAttribute("books", peopleService.getBooksByPersonId(id));
         return "people/show";
     }
 

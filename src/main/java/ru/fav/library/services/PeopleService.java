@@ -1,11 +1,14 @@
 package ru.fav.library.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fav.library.models.Book;
 import ru.fav.library.models.Person;
 import ru.fav.library.repositories.PeopleRepository;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +37,10 @@ public class PeopleService {
         return peopleRepository.findByEmail(email);
     }
 
+    public Optional<Person> findByFullName(String fullName) {
+        return peopleRepository.findByFullName(fullName);
+    }
+
     @Transactional
     public void save(Person person) {
         person.setCreatedAt(new Date());
@@ -50,6 +57,27 @@ public class PeopleService {
     @Transactional
     public void delete(int id) {
         peopleRepository.deleteById(id);
+    }
+
+    public List<Book> getBooksByPersonId(int id) {
+        Optional<Person> person = peopleRepository.findById(id);
+
+        if (person.isPresent()) {
+            Hibernate.initialize(person.get().getBooks());
+
+            person.get().getBooks().forEach(book -> {
+                long diff = new Date().getTime() - book.getTakenAt().getTime();
+
+                // 14 days
+                if (diff > 1209600000) {
+                    book.setExpired(true);
+                }
+            });
+
+            return person.get().getBooks();
+        }
+
+        return Collections.emptyList();
     }
 }
 

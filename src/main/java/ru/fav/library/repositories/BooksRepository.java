@@ -11,5 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface BooksRepository extends JpaRepository<Book, Integer> {
-    public List<Book> findByPerson(Person person);
+    List<Book> findByPerson(Person person);
+    List<Book> findByTitleStartingWith(String title);
 }

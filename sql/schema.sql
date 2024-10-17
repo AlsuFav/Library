@@ -16,5 +16,6 @@ create table book
     title varchar(70) not null,
     author varchar(70) not null,
     published int,
-    person_id int references person on delete set null
+    person_id int references person on delete set null,
+    taken_at date
 );

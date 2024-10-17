@@ -9,7 +9,6 @@ import ru.fav.library.models.Person;
 import ru.fav.library.services.BooksService;
 import ru.fav.library.services.PeopleService;
 
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -25,8 +24,15 @@ public class BooksController {
     }
 
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
+    public String index(Model model, @RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                        @RequestParam(value = "sort_by_year", required = false) boolean sortByYear) {
+
+        if (page == null || booksPerPage == null)
+            model.addAttribute("books", booksService.findAll(sortByYear));
+        else
+            model.addAttribute("books", booksService.findWithPagination(page, booksPerPage, sortByYear));
+
         return "books/index";
     }
 
@@ -34,11 +40,10 @@ public class BooksController {
     public String show(@PathVariable("id") int id, @ModelAttribute("person") Person person, Model model) {
         model.addAttribute("book", booksService.findById(id));
 
-        Optional<Person> bookOwner = booksService.findBookOwner(id);
+        Person bookOwner = booksService.getBookOwner(id);
 
-        if(bookOwner.isPresent()) {
-            model.addAttribute("owner", bookOwner.get());
-        }
+        if(bookOwner != null)
+            model.addAttribute("owner", bookOwner);
         else
             model.addAttribute("people", peopleService.findAll());
 
@@ -89,4 +94,14 @@ public class BooksController {
         return "redirect:/books/" + id;
     }
 
+    @GetMapping("/search")
+    public String searchPage() {
+        return "books/search";
+    }
+
+    @PostMapping("/search")
+    public String makeSearch(Model model, @RequestParam("query") String query) {
+        model.addAttribute("books", booksService.searchByTitle(query));
+        return "books/search";
+    }
 }
